@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#2563eb" />
+    <title>SubShelf - サブスク棚卸し</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>SubShelf</h1>
+      <p>1分で終わるサブスク棚卸し</p>
+    </header>
+
+    <main id="app">
+      <section id="home-view" class="view active">
+        <div class="card">
+          <h2>今週の請求予定</h2>
+          <ul id="this-week-list" class="list"></ul>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>期限超過（未確認）</h2>
+            <button id="bulk-process-toggle" class="ghost">一括処理</button>
+          </div>
+          <ul id="overdue-list" class="list"></ul>
+        </div>
+      </section>
+
+      <section id="list-view" class="view">
+        <div class="card">
+          <h2>一覧</h2>
+          <div class="controls">
+            <input id="search-input" placeholder="サービス名・タグで検索" />
+            <select id="sort-select">
+              <option value="nextBillingDate">次回請求日順</option>
+              <option value="amount">金額順</option>
+            </select>
+          </div>
+          <div class="controls grid4">
+            <select id="filter-category"></select>
+            <select id="filter-frequency"></select>
+            <select id="filter-auto-renew"></select>
+            <select id="filter-status"></select>
+          </div>
+          <ul id="subscription-list" class="list"></ul>
+        </div>
+      </section>
+
+      <section id="add-view" class="view">
+        <form id="subscription-form" class="card form">
+          <h2 id="form-title">追加（最短30秒）</h2>
+          <label>サービス名*
+            <input name="serviceName" required maxlength="80" />
+          </label>
+          <label>金額*
+            <input name="amount" required type="number" min="0" step="1" />
+          </label>
+          <label>頻度*
+            <select name="frequency" id="frequency-input" required></select>
+          </label>
+          <label>次回請求日*
+            <input name="nextBillingDate" id="next-billing-input" required type="date" />
+          </label>
+          <label>カテゴリ
+            <input name="category" list="category-presets" placeholder="例: 動画" />
+          </label>
+          <datalist id="category-presets"></datalist>
+          <label>支払方法
+            <input name="paymentMethod" list="payment-presets" placeholder="例: クレカ" />
+          </label>
+          <datalist id="payment-presets"></datalist>
+          <label>タグ（カンマ区切り）
+            <input name="tags" placeholder="仕事, 学習" />
+          </label>
+          <label>メモ
+            <textarea name="memo" rows="2" maxlength="300"></textarea>
+          </label>
+          <label>自動更新
+            <select name="autoRenew">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">保存</button>
+            <button type="button" id="cancel-edit" class="ghost hidden">編集キャンセル</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="dashboard-view" class="view">
+        <div class="card stats">
+          <h2>ダッシュボード</h2>
+          <p>月額換算合計: <strong id="monthly-total">¥0</strong></p>
+          <p>年額換算合計: <strong id="yearly-total">¥0</strong></p>
+        </div>
+        <div class="card">
+          <h3>カテゴリ別合計（月額換算）</h3>
+          <ul id="category-totals" class="list"></ul>
+        </div>
+        <div class="card">
+          <h3>上位サブスク TOP10（月額換算）</h3>
+          <ol id="top-subscriptions" class="list"></ol>
+        </div>
+      </section>
+
+      <section id="data-view" class="view">
+        <div class="card">
+          <h2>データ管理</h2>
+          <div class="row gap">
+            <button id="backup-json" class="primary">JSONバックアップ</button>
+            <button id="export-csv" class="ghost">CSVエクスポート</button>
+          </div>
+          <label class="file-input">JSON復元
+            <input type="file" id="restore-json" accept="application/json" />
+          </label>
+          <p class="small">復元時は既存データを置き換えます。</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="bottom-nav"></nav>
+
+    <template id="subscription-item-template">
+      <li class="item"></li>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
